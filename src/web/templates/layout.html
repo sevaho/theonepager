@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{{ if .Language }}
+<html lang="{{ _lower .Language }}">
+{{ else }}
+<html lang="en">
+{{ end }}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>
+        </title>
+
+        <link rel="stylesheet" href="/static/css/app.css?version={{_random_id }}">
+
+        {{ if eq _is_development true }}
+        <script src="/livereload.js"></script>
+        {{ end }}
+
+        <style>
+        </style>
+    </head>
+
+    <body class="">
+
+        <!-- Navigation -->
+        {{ template "navbar" }}
+
+
+        <!-- Body -->
+        {{ yield }}
+
+        <!-- footer (if any -->
+
+        <script>
+            console.log("IS_DEVELOPMENT: {{ _is_development }}, RELEASE: {{ _release }}");
+
+            // theme selector
+            window.addEventListener('load', function() {
+                hljs.highlightAll();
+            });
+
+            let theme = localStorage.getItem('theme')
+            // Loop through each input element and set its checked state
+            document.querySelectorAll('input[name="theme-dropdown"]').forEach(input => {
+                input.checked = theme === input.value || false;
+
+                input.addEventListener('change', () => {
+                    localStorage.setItem('theme', input.value);
+                });
+            });
+        </script>
+    </body>
+</html>

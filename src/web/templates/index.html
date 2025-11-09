@@ -1,0 +1,101 @@
+
+
+<div class="min-h-screen bg-base-100 mt-10">
+
+
+  <!-- Main Dashboard -->
+  <main class="container mx-auto px-6 py-12">
+    <!-- Applications by Category -->
+    {{ range $category, $applications := .Applications }}
+      <!-- Category Header -->
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-base-content mb-4">{{ $category }}</h2>
+        
+        <!-- Category Applications Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {{ range $application := $applications }}
+            <a href="{{ $application.Link }}" class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow min-h-24">
+
+              <div class="bg-base-200 card-body flex-row items-center p-5 gap-4">
+                <!-- Application Icon -->
+                <div class="avatar flex-shrink-0">
+                  <div class="w-14 h-14 rounded-lg">
+                    {{ if $application.Svgicon }}
+                      {{ $application.Svgicon | _html }}
+                    {{ else if $application.IconProxy }}
+                      <img src="{{ $application.IconProxy }}" 
+                           alt="{{ $application.Name }}" 
+                           class="w-full h-full rounded-lg object-cover"
+                           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                      <div class="w-full h-full bg-base-300 rounded-lg hidden items-center justify-center">
+                        <svg class="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                      </div>
+                    {{ else }}
+                      <div class="w-full h-full bg-base-300 rounded-lg flex items-center justify-center">
+                        <svg class="w-7 h-7 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                      </div>
+                    {{ end }}
+                  </div>
+                </div>
+                
+                <!-- Application Info -->
+                <div class="flex-1 min-w-0">
+                  {{ if $application.Badge }}
+                    <div class = "flex justify-end">
+                        <div class="badge badge-outline badge-primary">{{ $application.Badge }}</div>
+                    </div>
+                  {{ end }}
+                  <div class="card-title text-base leading-tight truncate">{{ $application.Name }}</div>
+                  <p class="text-sm text-base-content/70 truncate">{{ $application.Link }}</p>
+
+                  {{ if $application.Description }}
+                    <div class="tooltip" data-tip="{{ $application.Description }}">
+                    <p class="text-xs text-base-content/60 mt-1">
+                      {{ if gt (len $application.Description) 35 }}
+                        {{ slice $application.Description 0 35 }}...
+                      {{ else }}
+                        {{ $application.Description }}
+                      {{ end }}
+                    </p>
+                    </div>
+                  {{ end }}
+                </div>
+                
+                <!-- Launch Icon -->
+                <div class="flex-shrink-0">
+                  <svg class="w-5 h-5 text-base-content/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                </div>
+              </div>
+            </a>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+
+    <!-- Empty State (if no applications) -->
+    {{ if not .Applications }}
+      <div class="hero min-h-96">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <div class="avatar placeholder mb-4">
+              <div class="bg-base-200 text-base-content rounded-lg w-16">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+              </div>
+            </div>
+            <h1 class="text-2xl font-bold">No applications configured</h1>
+            <p class="py-6">Add applications to your config.yaml file to see them here.</p>
+          </div>
+        </div>
+      </div>
+    {{ end }}
+  </main>
+
+</div>
