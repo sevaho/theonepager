@@ -14,7 +14,6 @@ type Environment struct {
 	IS_DEVELOPMENT             bool          `default:"false"`
 	STATIC_DIRECTORY           string        `default:"static"`
 	TEMPLATES_DIRECTORY        string        `default:"templates"`
-	HOT_RELOAD_TEMPLATE_FOLDER bool
 	CONFIG_FILE_PATH           string
 }
 
