@@ -5,7 +5,6 @@
 ##---------- Variables --------------------------------------------------------
 PREFIX = /usr/local  # Default installation directory
 KO_DOCKER_REPO = sevaho/theonepager
-KO_DOCKER_REPO = sevaho
 
 ##---------- Build targets ----------------------------------------------------
 
@@ -51,7 +50,7 @@ compose: ## Run docker compose stack
 	docker-compose up
 
 serve: ## Run docker locally
-	KO_DOCKER_REPO=$KO_DOCKER_REPO docker run -p3000:3000 --network="host" -v $$(pwd)/config.yaml:/config.yaml --env-file=.env $$(ko build .) --serve -c "/config.yaml"
+	docker run -p3000:3000 --network="host" -v $$(pwd)/config.yaml:/config.yaml --env-file=.env $$(ko build . --local) --serve -c "/config.yaml"
 
 release: ## Release
-	export KO_DOCKER_REPO=$(KO_DOCKER_REPO) && ko build --tags $$(git describe --tags --abbrev=0) --bare .
+	export KO_DOCKER_REPO=$(KO_DOCKER_REPO) && ko build --tags $$(git describe --tags --abbrev=0),latest --bare .
