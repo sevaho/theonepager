@@ -11,7 +11,6 @@ import (
 
 type Application struct {
 	Name        string `json:"name"`
-	Category    string `json:"category"`
 	Icon        string `json:"icon"`
 	Svgicon     string `json:"svgicon"`
 	Link        string `json:"link"`
@@ -23,34 +22,29 @@ type Application struct {
 }
 
 type Config struct {
-	Applications []Application `json:"applications"`
+	Applications map[string][]Application `json:"applications"`
 }
 
 func (c *Config) Check() bool {
 	return true
 }
 
-func (c *Config) SetProxyIconLink() {
-	for i := range c.Applications {
-		if c.Applications[i].Icon != "" {
-			c.Applications[i].IconProxy = "/v1/api/iconcache?link=" + c.Applications[i].Icon
-		}
+func (c *Config) Sort() {
+	for category := range c.Applications {
+		sort.Slice(c.Applications[category], func(i, j int) bool {
+			return c.Applications[category][i].Name < c.Applications[category][j].Name
+		})
 	}
 }
 
-func (c *Config) GetApplicationsByCategory() map[string][]Application {
-	data := make(map[string][]Application)
-
-	for _, app := range c.Applications {
-		data[app.Category] = append(data[app.Category], app)
+func (c *Config) SetProxyIconLink() {
+	for category, applications := range c.Applications {
+		for i := range applications {
+			if c.Applications[category][i].Icon != "" {
+				c.Applications[category][i].IconProxy = "/v1/api/iconcache?link=" + c.Applications[category][i].Icon
+			}
+		}
 	}
-	for category := range data {
-		sort.Slice(data[category], func(i, j int) bool {
-			return data[category][i].Name < data[category][j].Name
-		})
-	}
-
-	return data
 }
 
 func parseConfig(configfilepath string) (*Config, error) {
@@ -70,7 +64,7 @@ func parseConfig(configfilepath string) (*Config, error) {
 	}
 
 	config.Check()
-
+	config.Sort()
 	config.SetProxyIconLink()
 
 	return &config, nil

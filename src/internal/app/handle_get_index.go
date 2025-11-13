@@ -8,7 +8,7 @@ import (
 
 func handleGetIndex(config *Config) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		params := Params{"Language": "NL", "Country": "", "Applications": config.GetApplicationsByCategory()}
+		params := Params{"Language": "NL", "Country": "", "Applications": config.Applications}
 		return ctx.Render(http.StatusOK, "index", params)
 	}
 }
