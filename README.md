@@ -24,8 +24,11 @@ applications:
 
 ```bash
 docker run -p3000:3000 -v $(pwd)/config.yaml:/config.yaml sevaho/theonepager --serve -c "/config.yaml"
-
 ```
+
+## Where to get icons
+
+- https://selfh.st/icons/
 
 ## Helm
 
