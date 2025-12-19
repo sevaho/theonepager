@@ -11,7 +11,7 @@ import (
 
 type Application struct {
 	Name        string `json:"name"`
-	Icon        string `json:"icon"`
+	Icon        string `json:"icon"` // Link to icon
 	Svgicon     string `json:"svgicon"`
 	Link        string `json:"link"`
 	Description string `json:"description"`

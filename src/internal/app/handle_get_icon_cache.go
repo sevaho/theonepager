@@ -3,8 +3,8 @@ package app
 import (
 	"net/http"
 
-	"github.com/go-resty/resty/v2"
 	"github.com/labstack/echo/v4"
+	"github.com/sevaho/theonepager/src/pkg/resty"
 )
 
 type Hit struct {
@@ -14,7 +14,6 @@ type Hit struct {
 
 func handleGetIconCache() echo.HandlerFunc {
 	cache := make(map[string]Hit)
-	var client = resty.New()
 
 	return func(ctx echo.Context) error {
 		link := ctx.QueryParam("link")
@@ -24,7 +23,7 @@ func handleGetIconCache() echo.HandlerFunc {
 		if val, ok := cache[link]; ok {
 			hit = val
 		} else {
-			res, err := client.R().Get(link)
+			res, err := resty.Client.R().Get(link)
 			if err != nil {
 				return ctx.String(http.StatusInternalServerError, err.Error())
 			}
